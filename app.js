@@ -147,5 +147,12 @@ const promptProject = portfolioData => {
 promptUser()
 .then(promptProject)
 .then(portfolioData => {
-    console.log(portfolioData);
-});
+    const pageHTML = generratePage(portfolioData);
+
+    // fs.writeFile('./index.html', err => {
+        // if (err_ throw new Error(err);
+        
+        // console.log('Page Created! Check out index.html in this directory to see it!');
+        // });
+    });
+    
