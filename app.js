@@ -2,18 +2,40 @@
 const inquirer = require('inquirer');
 
 
-const fs = require('fs');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 
 const generatePage = require('./src/page-template.js');
 
-/*const pageHTML = generatePage(name, github);
+
+
+// const pageHTML = generatePage(name, github);
+
+// Check code placement
 
 fs.writeFile('./index.html', generatePage(name, github), err => {
     if (err) throw err;
 
     console.log('Portfolio complete! Check out index.html to see the output!')
 });
-*/
+
+
+fs.writeFile('./dist/index.html', pageHTML, err => {
+    if (err) {
+        console.log(err);
+        return;
+    }
+    console.log('Page created! Check out index.html in this directory to see it!');
+
+    fs.copyFile('./src/styl.css', './dist/style.css', err => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log('Style sheet copied successfully!');
+    });
+});
+
+// end check
 
 const promptUser = () => {
     return inquirer.prompt([
@@ -63,7 +85,8 @@ const promptProject = portfolioData => {
     console.log(`
     ===================
     Add a new project 
-    ===================`);
+    ===================
+    `);
 
     // if there is no 'projects' array property, create one
     if (!portfolioData) {
@@ -147,12 +170,19 @@ const promptProject = portfolioData => {
 promptUser()
 .then(promptProject)
 .then(portfolioData => {
-    const pageHTML = generratePage(portfolioData);
-
-    // fs.writeFile('./index.html', err => {
-        // if (err_ throw new Error(err);
-        
-        // console.log('Page Created! Check out index.html in this directory to see it!');
-        // });
-    });
+    return generatePage(portfolioData);
+})
+.then(writeFileResponse => {
+    return fs.writeFile(pageHTML);
+})
+.then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+})
+.then(copyFileResponse => {
+    console.log(copyFileResponse);
+})
+.catch(err => {
+    console.log(err);
+});
     
